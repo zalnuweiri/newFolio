@@ -19,6 +19,7 @@ export function ProjectsPage({ theme, onBack, scrollToProjectId }: ProjectsPageP
   const [hoveredProject, setHoveredProject] = React.useState<number | null>(null);
   const [pauseTerminal, setPauseTerminal] = React.useState(false);
   const videoRefs = React.useRef<{ [key: number]: HTMLVideoElement | null }>({});
+  const heroRef = React.useRef<HTMLDivElement>(null);
 
   // Scroll to project when scrollToProjectId changes
   React.useEffect(() => {
@@ -33,29 +34,28 @@ export function ProjectsPage({ theme, onBack, scrollToProjectId }: ProjectsPageP
     }
   }, [scrollToProjectId]);
 
-  // Pause terminal animation when user scrolls
+  // Pause terminal animation when user scrolls past the hero
   React.useEffect(() => {
-    let scrollTimeout: NodeJS.Timeout;
+    const heroElement = heroRef.current;
+    if (!heroElement) return;
 
-    const handleScroll = () => {
-      if (!pauseTerminal) {
-        setPauseTerminal(true);
-      }
+    const observer = new IntersectionObserver(
+        ([entry]) => {
+          // If hero is in view, unpause. If not in view, pause.
+          setPauseTerminal(!entry.isIntersecting);
+        },
+        {
+          threshold: 0.1, // Trigger when at least 10% of hero is visible
+          rootMargin: '0px'
+        }
+    );
 
-      // Optionally unpause after scrolling stops (remove these lines to keep it paused)
-      // clearTimeout(scrollTimeout);
-      // scrollTimeout = setTimeout(() => {
-      //   setPauseTerminal(false);
-      // }, 2000);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    observer.observe(heroElement);
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
-      clearTimeout(scrollTimeout);
+      observer.disconnect();
     };
-  }, [pauseTerminal]);
+  }, []);
 
   const featuredProjects = [
     {
@@ -152,7 +152,7 @@ export function ProjectsPage({ theme, onBack, scrollToProjectId }: ProjectsPageP
   return (
       <div className="min-h-screen w-full">
         {/* Hero Section with FaultyTerminal */}
-        <section className="relative h-screen w-full overflow-hidden bg-black">
+        <section className="relative h-screen w-full overflow-hidden bg-black" ref={heroRef}>
           {/* GradientBlinds (bg1 - saved for later) */}
           {/* <div className="absolute top-0 left-0 w-full h-full z-0" style={{ width: '100%', height: '100%', opacity: 0.9 }}>
           <GradientBlinds
