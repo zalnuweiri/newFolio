@@ -178,7 +178,7 @@ export default function App() {
           <Home theme={theme} onNavigate={setCurrentPage} />
         ) : (
           <>
-            <div className="max-w-[1600px] mx-auto mt-12" id="dashboard">
+            <div className="max-w-[1600px] mx-auto mt-2" id="dashboard">
               {/* Section Header */}
               <div className="mb-6 px-4">
                 <h2 className="text-white/30 text-sm tracking-wide">
