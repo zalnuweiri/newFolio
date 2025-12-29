@@ -1,0 +1,32 @@
+.card-stack-container {
+  position: relative;
+  width: 100%;
+  padding: 0 2rem;
+}
+
+.card-stack-item {
+  position: relative;
+  width: 100%;
+  margin-bottom: 150px;
+  transform-origin: top center;
+  will-change: transform;
+}
+
+.card-stack-item:last-child {
+  margin-bottom: 0;
+}
+
+.card-stack-spacer {
+  height: 0;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .card-stack-container {
+    padding: 0 1rem;
+  }
+  
+  .card-stack-item {
+    margin-bottom: 100px;
+  }
+}
